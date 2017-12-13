@@ -1,4 +1,4 @@
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.18;
 
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
 import "zeppelin-solidity/contracts/token/ERC20.sol";
@@ -75,6 +75,7 @@ contract ICOBooster is Ownable {
         owner = _owner;
     }
 
+    // fixme: VM Exception
     function newCampaign(uint256 _campaignId, uint256 _startTime, uint256 _endTime, uint256 _minInvestment, uint256 _cap, uint256 _hardCap, uint256 _oneAddressLimit,  address _crowdSaleAddress, address _tokenAddress) public onlyOwner returns(uint index) {
         require(_startTime > now + 10 minutes);
         require(_endTime > _startTime);
@@ -110,7 +111,7 @@ contract ICOBooster is Ownable {
         Campaign storage c = campaigns[campaignId];
 
         // add funds to campaign total wei amount
-        c.weiRaised = c.weiRaised.add(weiAmount);
+        c.weiRaised = c.weiRaised.add(msg.value);
 
         // update balance
         c.balances[msg.sender] = c.balances[msg.sender].add(msg.value);
@@ -149,6 +150,7 @@ contract ICOBooster is Ownable {
         return true;
     }
 
+    // fixme: VM Exeption
     function claimTokens(uint256 campaignId) public returns(bool) {
         Campaign storage c = campaigns[campaignId];
         require(c.state == State.Closed);
