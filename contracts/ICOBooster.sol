@@ -1,4 +1,4 @@
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.18;
 
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
 import "zeppelin-solidity/contracts/token/ERC20.sol";
@@ -75,14 +75,21 @@ contract ICOBooster is Ownable {
         owner = _owner;
     }
 
-    function newCampaign(uint256 _campaignId, uint256 _startTime, uint256 _endTime, uint256 _minInvestment, uint256 _cap, uint256 _hardCap, uint256 _oneAddressLimit,  address _crowdSaleAddress, address _tokenAddress) public onlyOwner returns(uint index) {
+    function createCampaign() public onlyOwner returns(uint index) {
+        return newCampaign(0, 0, 100000, 0, 100, 1000, 1000, 0x0, 0x1);
+    }
+
+    function newCampaign(uint256 _campaignId, uint256 _startTime, uint256 _endTime, uint256 _minInvestment,
+        uint256 _cap, uint256 _hardCap, uint256 _oneAddressLimit,  address _crowdSaleAddress,
+        address _tokenAddress) public onlyOwner returns(uint index) {
+/*
         require(_startTime > now + 10 minutes);
         require(_endTime > _startTime);
         require(_minInvestment > 0);
         require(_cap > _minInvestment);
         require(_hardCap >= _cap);
         require(_crowdSaleAddress != address(0));
-
+*/
         campaigns[_campaignId].startTime = _startTime;
         campaigns[_campaignId].endTime = _endTime;
         campaigns[_campaignId].cap = _cap * UNIT;
@@ -110,7 +117,7 @@ contract ICOBooster is Ownable {
         Campaign storage c = campaigns[campaignId];
 
         // add funds to campaign total wei amount
-        c.weiRaised = c.weiRaised.add(weiAmount);
+        c.weiRaised = c.weiRaised.add(msg.value);
 
         // update balance
         c.balances[msg.sender] = c.balances[msg.sender].add(msg.value);
