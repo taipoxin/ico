@@ -156,6 +156,7 @@ contract ICOBooster is Ownable {
         return true;
     }
 
+    // fixme: VM Exeption
     function claimTokens(uint256 campaignId) public returns(bool) {
         Campaign storage c = campaigns[campaignId];
         require(c.state == State.Closed);
